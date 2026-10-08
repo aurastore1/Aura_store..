@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Store | Digital Games & Cards</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Firebase SDK for Realtime Cloud Synchronization across all devices -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        aura: {
+                            red: '#ff1e42',
+                            darkRed: '#99001a',
+                            darkBg: '#0b0c10',
+                            cardBg: '#13151b',
+                            accent: '#ff2e54',
+                            border: '#2a2e39'
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+            background-color: #0b0c10;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(255, 30, 66, 0.35);
+        }
+        .neon-glow-lg {
+            box-shadow: 0 0 35px rgba(255, 30, 66, 0.5);
+        }
+        .neon-border {
+            border-color: #ff1e42;
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0c10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff1e42;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-aura-darkBg/95 backdrop-blur-md border-b border-aura-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('store')">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-aura-darkRed to-aura-red flex items-center justify-center text-white text-2xl font-black neon-glow">
+                    <i class="fa-solid font-black fa-crown text-yellow-300"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-wider text-white">AURA <span class="text-aura-red">STORE</span></h1>
+                    <p class="text-xs text-gray-400 tracking-widest uppercase font-semibold" id="headerTagline">Official Games & Cards</p>
+                </div>
+            </div>
+
+            <!-- Controls & Actions -->
+            <div class="flex items-center gap-3 sm:gap-5">
+                <!-- Live Cloud Sync Indicator Status -->
+                <div id="cloudSyncBadge" class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 text-xs font-semibold">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span id="syncStatusText">Cloud Live</span>
+                </div>
+
+                <!-- Language Switcher -->
+                <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-lg border border-aura-border bg-aura-cardBg hover:border-aura-red transition text-xs font-bold flex items-center gap-2 text-gray-200">
+                    <i class="fa-solid fa-globe text-aura-red"></i>
+                    <span id="langBtnText">العربية</span>
+                </button>
+
+                <!-- Admin Button -->
+                <button onclick="openAdminModal()" class="px-3.5 py-1.5 rounded-lg bg-aura-cardBg border border-aura-border hover:border-aura-red text-aura-red font-bold text-xs sm:text-sm flex items-center gap-2 transition">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span id="adminBtnText">Admin</span>
+                </button>
+
+                <!-- Cart Button -->
+                <button onclick="toggleCartDrawer()" class="relative p-2.5 rounded-xl bg-aura-red hover:bg-aura-darkRed text-white font-bold transition neon-glow">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span id="cartBadgeCount" class="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs font-black w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Hero Store Banner -->
+        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-aura-cardBg via-black to-aura-darkRed border border-aura-border p-6 sm:p-10 mb-10 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="z-10 max-w-xl text-center md:text-left" id="heroTextContainer">
+                <span class="px-3 py-1 bg-aura-red/20 border border-aura-red text-aura-red text-xs font-bold uppercase tracking-widest rounded-full" id="heroBadge">Instant Digital Delivery</span>
+                <h2 class="text-3xl sm:text-5xl font-black mt-3 mb-3 leading-tight text-white" id="heroTitle">LEVEL UP YOUR GAMING EXPERIENCE</h2>
+                <p class="text-gray-300 text-sm sm:text-base leading-relaxed" id="heroSubtitle">Get official game keys, top-ups, and gift cards at the best rates with instant support.</p>
+            </div>
+            <div class="z-10 flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                <a href="#gamesSection" class="px-6 py-3.5 rounded-xl bg-aura-red hover:bg-aura-darkRed text-white font-bold text-center transition neon-glow">
+                    <i class="fa-solid fa-gamepad mr-2"></i> <span id="exploreGamesBtn">Explore Games</span>
+                </a>
+            </div>
+            <!-- Decorative Glow Background -->
+            <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-aura-red/20 rounded-full blur-3xl pointer-events-none"></div>
+        </div>
+
+        <!-- Search & Filter Controls -->
+        <div class="mb-8 flex flex-col sm:flex-row gap-4 items-center justify-between">
+            <div class="relative w-full sm:w-96">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search games, gift cards..." class="w-full bg-aura-cardBg border border-aura-border rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-aura-red transition">
+            </div>
+            <div class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0" id="categoryTabs">
+                <button onclick="filterCategory('all')" class="cat-btn active px-4 py-2 rounded-xl bg-aura-red text-white text-xs font-bold whitespace-nowrap transition">All Items</button>
+                <button onclick="filterCategory('games')" class="cat-btn px-4 py-2 rounded-xl bg-aura-cardBg border border-aura-border text-gray-300 hover:border-aura-red text-xs font-bold whitespace-nowrap transition">Games</button>
+                <button onclick="filterCategory('cards')" class="cat-btn px-4 py-2 rounded-xl bg-aura-cardBg border border-aura-border text-gray-300 hover:border-aura-red text-xs font-bold whitespace-nowrap transition">Gift Cards</button>
+            </div>
+        </div>
+
+        <!-- Games Grid Container -->
+        <div id="gamesSection" class="scroll-mt-24">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl sm:text-2xl font-extrabold flex items-center gap-3" id="catalogTitle">
+                    <i class="fa-solid fa-fire text-aura-red"></i> Available Products
+                </h3>
+                <span id="productCount" class="text-xs text-gray-400 font-semibold">0 Products Loaded</span>
+            </div>
+
+            <!-- Grid Items -->
+            <div id="gamesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Dynamic Items Rendered Here -->
+            </div>
+            
+            <!-- Empty Search State -->
+            <div id="emptySearchState" class="hidden py-16 text-center">
+                <i class="fa-solid fa-ghost text-5xl text-gray-600 mb-4"></i>
+                <h4 class="text-lg font-bold text-gray-400" id="noResultsText">No products found</h4>
+            </div>
+        </div>
+    </main>
+
+    <!-- Shopping Cart Modal Overlay -->
+    <div id="cartDrawerOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex justify-end">
+        <div id="cartDrawerContent" class="w-full max-w-md bg-aura-cardBg h-full flex flex-col justify-between p-6 overflow-y-auto translate-x-full transition-transform duration-300 border-l border-aura-border">
+            
+            <!-- Cart Header -->
+            <div>
+                <div class="flex items-center justify-between border-b border-aura-border pb-4 mb-4">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-bag-shopping text-aura-red text-2xl"></i>
+                        <h3 class="text-lg font-extrabold text-white" id="cartTitle">Your Shopping Cart</h3>
+                    </div>
+                    <button onclick="toggleCartDrawer()" class="text-gray-400 hover:text-white p-2">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Items Container -->
+                <div id="cartItemsList" class="space-y-4 max-h-[35vh] overflow-y-auto pr-1">
+                    <!-- Cart items rendered here -->
+                </div>
+            </div>
+
+            <!-- Checkout Form & Payment Info -->
+            <div class="border-t border-aura-border pt-4 mt-4 space-y-4">
+                
+                <!-- Total Display -->
+                <div class="flex justify-between items-center py-2 bg-aura-darkBg px-4 rounded-xl border border-aura-border">
+                    <span class="text-sm text-gray-400 font-semibold" id="cartTotalLabel">Total Amount:</span>
+                    <span id="cartTotalPrice" class="text-2xl font-black text-aura-red">EGP 0</span>
+                </div>
+
+                <!-- Customer Details Form -->
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 mb-1" id="lblCustomerName">Your Name / الاسم</label>
+                        <input type="text" id="custNameInput" placeholder="John Doe / أحمد محمود" class="w-full bg-aura-darkBg border border-aura-border rounded-lg p-2.5 text-xs text-white focus:border-aura-red focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 mb-1" id="lblCustomerPhone">Phone Number / رقم الهاتف</label>
+                        <input type="tel" id="custPhoneInput" placeholder="010XXXXXXXX" class="w-full bg-aura-darkBg border border-aura-border rounded-lg p-2.5 text-xs text-white focus:border-aura-red focus:outline-none">
+                    </div>
+
+                    <!-- Payment Options Selector -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 mb-1" id="lblPaymentMethod">Payment Method / طريقة الدفع</label>
+                        <select id="paymentMethodSelect" onchange="updatePaymentDetailsDisplay()" class="w-full bg-aura-darkBg border border-aura-border rounded-lg p-2.5 text-xs text-white focus:border-aura-red focus:outline-none">
+                            <option value="vodafone">💵 Vodafone Cash (01060455989)</option>
+                            <option value="instapay">📲 InstaPay (01060455989)</option>
+                            <option value="telda">💰 Telda (hamzaahmed63626)</option>
+                        </select>
+                    </div>
+
+                    <!-- Active Payment Instructions Box -->
+                    <div id="paymentInstructionsBox" class="p-3 bg-aura-darkBg/90 rounded-xl border border-aura-red/40 text-xs space-y-2">
+                        <p class="text-gray-300 font-medium" id="payInstructionsText">Transfer payment to the selected account below:</p>
+                        <div class="flex items-center justify-between bg-black/50 p-2 rounded border border-aura-border">
+                            <span id="paymentTargetAccount" class="font-mono text-yellow-400 font-bold">01060455989</span>
+                            <button onclick="copyPaymentNumber()" class="px-2 py-1 bg-aura-red text-white text-[10px] font-bold rounded hover:bg-aura-darkRed">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Upload Receipt Screenshot -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-300 mb-1" id="lblUploadReceipt">Upload Payment Screenshot / صورة التحويل</label>
+                        <input type="file" id="receiptFileInput" accept="image/*" onchange="previewReceiptImage(event)" class="w-full bg-aura-darkBg text-xs text-gray-400 border border-aura-border rounded-lg p-2 file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-aura-red file:text-white hover:file:bg-aura-darkRed">
+                        <div id="receiptPreviewBox" class="hidden mt-2 relative w-full h-24 bg-black rounded border border-aura-border overflow-hidden">
+                            <img id="receiptPreviewImg" src="" class="w-full h-full object-contain">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Order Button -->
+                <button onclick="submitOrderViaWhatsApp()" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm flex items-center justify-center gap-2 transition shadow-lg shadow-emerald-950">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span id="submitOrderBtnText">Send Order to WhatsApp</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Protected Admin Portal Modal -->
+    <div id="adminModalOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-aura-cardBg border border-aura-border w-full max-w-3xl rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+            
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between border-b border-aura-border pb-4 mb-6">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-user-shield text-aura-red text-2xl"></i>
+                    <h3 class="text-xl font-black text-white" id="adminModalTitle">Aura Admin Control Portal</h3>
+                </div>
+                <button onclick="closeAdminModal()" class="text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Admin Authentication Form -->
+            <div id="adminLoginForm" class="py-8 space-y-4 max-w-sm mx-auto text-center">
+                <i class="fa-solid fa-lock text-4xl text-aura-red mb-2"></i>
+                <h4 class="text-lg font-bold text-white">Enter Admin Password</h4>
+                <p class="text-xs text-gray-400">Default Password: <code class="text-yellow-400">admin123</code></p>
+                <input type="password" id="adminPassInput" placeholder="Enter Password..." class="w-full bg-aura-darkBg border border-aura-border rounded-xl p-3 text-center text-sm font-mono text-white focus:border-aura-red focus:outline-none">
+                <button onclick="authenticateAdmin()" class="w-full py-3 bg-aura-red hover:bg-aura-darkRed text-white font-bold rounded-xl transition">
+                    Unlock Admin Panel
+                </button>
+            </div>
+
+            <!-- Admin Control Dashboard (Shown after Login) -->
+            <div id="adminDashboardContent" class="hidden space-y-8">
+                
+                <!-- Admin Navigation Bar -->
+                <div class="flex flex-wrap gap-2 border-b border-aura-border pb-3">
+                    <button onclick="switchAdminTab('addGame')" class="admin-tab-btn active px-4 py-2 bg-aura-red text-white text-xs font-bold rounded-lg">Add New Game</button>
+                    <button onclick="switchAdminTab('manageGames')" class="admin-tab-btn px-4 py-2 bg-aura-darkBg border border-aura-border text-gray-300 text-xs font-bold rounded-lg">Manage Games & Prices</button>
+                    <button onclick="switchAdminTab('viewOrders')" class="admin-tab-btn px-4 py-2 bg-aura-darkBg border border-aura-border text-gray-300 text-xs font-bold rounded-lg">Incoming Orders & Receipts</button>
+                    <button onclick="switchAdminTab('securitySettings')" class="admin-tab-btn px-4 py-2 bg-aura-darkBg border border-aura-border text-yellow-400 text-xs font-bold rounded-lg">Security & Password</button>
+                </div>
+
+                <!-- Tab 1: Add New Game -->
+                <div id="tabAddGame" class="admin-tab-panel space-y-4">
+                    <h4 class="font-bold text-white text-base">Add New Product to Store</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-300 mb-1">Product Name / اسم اللعبة</label>
+                            <input type="text" id="newGameTitle" placeholder="e.g. EA SPORTS FC 25" class="w-full bg-aura-darkBg border border-aura-border rounded-lg p-2.5 text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-300 mb-1">Category / التصنيف</label>
+                            <select id="newGameCat" class="w-full bg-aura-darkBg border border-aura-border rounded-lg p-2.5 text-xs text-white">
+                                <option value="games">Digital Game</option>
+                                <option value="cards">Gift Card / Top Up</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-300 mb-1">Price (EGP) / السعر</label>
+                            <input type="number" id="newGamePrice" placeholder="e.g. 1200" class="w-full bg-aura-darkBg border border-aura-border rounded-lg p-2.5 text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-300 mb-1">Product Image / صورة اللعبة</label>
+                            <input type="file" id="newGameImgFile" accept="image/*" onchange="handleGameImageUpload(event)" class="w-full bg-aura-darkBg text-xs text-gray-400 border border-aura-border rounded-lg p-1.5">
+                        </div>
+                    </div>
+                    <!-- Image Preview -->
+                    <div id="gameImgPreviewContainer" class="hidden w-32 h-32 relative rounded-lg border border-aura-border overflow-hidden bg-black">
+                        <img id="gameImgPreview" src="" class="w-full h-full object-cover">
+                    </div>
+                    <button onclick="createNewGameSubmit()" class="px-6 py-3 bg-aura-red hover:bg-aura-darkRed text-white text-xs font-extrabold rounded-xl transition">
+                        <i class="fa-solid fa-plus mr-1"></i> Add Product & Sync Cloud
+                    </button>
+                </div>
+
+                <!-- Tab 2: Manage Games & Edit Prices / Delete -->
+                <div id="tabManageGames" class="admin-tab-panel hidden space-y-4">
+                    <h4 class="font-bold text-white text-base">Current Store Inventory</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-300 border border-aura-border rounded-xl overflow-hidden">
+                            <thead class="bg-aura-darkBg text-gray-400 uppercase font-bold">
+                                <tr>
+                                    <th class="p-3">Product</th>
+                                    <th class="p-3">Category</th>
+                                    <th class="p-3">Price (EGP)</th>
+                                    <th class="p-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminGamesTableBody" class="divide-y divide-aura-border">
+                                <!-- Dynamic Table Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Incoming Orders & Receipts -->
+                <div id="tabViewOrders" class="admin-tab-panel hidden space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-white text-base">Recent Orders & Payment Receipts</h4>
+                        <button onclick="clearAllOrders()" class="text-xs text-red-400 hover:underline">Clear Orders History</button>
+                    </div>
+                    <div id="adminOrdersContainer" class="space-y-4">
+                        <!-- Dynamic Orders -->
+                    </div>
+                </div>
+
+                <!-- Tab 4: Security & Password Settings -->
+                <div id="tabSecuritySettings" class="admin-tab-panel hidden space-y-4 max-w-md">
+                    <h4 class="font-bold text-white text-base">Change Admin Password / تغيير كلمة السر</h4>
+                    <div class="space-y-3 bg-aura-darkBg p-4 rounded-xl border border-aura-border">
+                        <div>
+                            <label class="block text-xs text-gray-300 mb-1">Current Password / كلمة السر الحالية</label>
+                            <input type="password" id="oldPassInput" class="w-full bg-aura-cardBg border border-aura-border rounded-lg p-2.5 text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-300 mb-1">New Password / كلمة السر الجديدة</label>
+                            <input type="password" id="newPassInput" class="w-full bg-aura-cardBg border border-aura-border rounded-lg p-2.5 text-xs text-white">
+                        </div>
+                        <button onclick="saveNewAdminPassword()" class="w-full py-2.5 bg-aura-red hover:bg-aura-darkRed text-white text-xs font-bold rounded-lg transition">
+                            Save & Update Password
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Notification Toast Element -->
+    <div id="toastNotification" class="fixed bottom-6 right-6 z-50 bg-aura-cardBg border border-aura-red text-white text-xs font-bold px-4 py-3 rounded-xl shadow-2xl opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-3">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-aura-red text-base"></i>
+        <span id="toastMessage">Notification Message</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-aura-darkBg border-t border-aura-border py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+            <h4 class="text-lg font-black tracking-wider text-white">AURA <span class="text-aura-red">STORE</span></h4>
+            <p class="text-xs text-gray-400">© 2026 Aura Store. All rights reserved. Cloud Synchronized Storefront.</p>
+            <div class="flex justify-center gap-4 text-sm text-gray-400">
+                <span class="hover:text-aura-red cursor-pointer"><i class="fa-brands fa-whatsapp"></i> 01043858175</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        
+        // Default Catalog Items
+        const defaultGamesList = [
+            { id: 'g1', title: 'EA SPORTS FC 25', category: 'games', price: 1250, image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80' },
+            { id: 'g2', title: 'Call of Duty: Black Ops 6', category: 'games', price: 1500, image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80' },
+            { id: 'g3', title: 'PUBG Mobile 600 UC Card', category: 'cards', price: 420, image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80' },
+            { id: 'g4', title: 'PlayStation $25 Gift Card', category: 'cards', price: 1200, image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80' }
+        ];
+
+        // Global State
+        let storeState = {
+            lang: 'en',
+            games: [],
+            cart: [],
+            orders: [],
+            adminPassword: 'admin123',
+            currentCategory: 'all',
+            searchQuery: '',
+            uploadedReceiptBase64: '',
+            uploadedNewGameImgBase64: ''
+        };
+
+        // WhatsApp Merchant Number
+        const WHATSAPP_NUMBER = '201043858175';
+
+        // Free Public Firebase Configuration for Seamless Realtime Cloud Synchronization
+        const firebaseConfig = {
+            databaseURL: "https://aura-store-default-rtdb.europe-west1.firebasedatabase.app"
+        };
+
+        let dbRef = null;
+
+        try {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            dbRef = firebase.database().ref('aura_store_data');
+            
+            // Listen for Realtime Cloud Updates from any device!
+            dbRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    if (data.games) storeState.games = data.games;
+                    if (data.adminPassword) storeState.adminPassword = data.adminPassword;
+                    if (data.orders) storeState.orders = data.orders;
+                    
+                    // Save locally as fallback
+                    saveStateLocally();
+                    renderGames();
+                    if (document.getElementById('adminDashboardContent').style.display !== 'none') {
+                        renderAdminGamesTable();
+                        renderAdminOrders();
+                    }
+                    showCloudSyncStatus('Cloud Live');
+                }
+            }, (error) => {
+                console.warn('Firebase DB offline fallback to LocalStorage:', error);
+                loadFromLocalStorage();
+                showCloudSyncStatus('Local Storage');
+            });
+        } catch (e) {
+            console.warn('Firebase SDK error, using local storage fallback', e);
+            loadFromLocalStorage();
+        }
+
+        // Show cloud status badge
+        function showCloudSyncStatus(status) {
+            const badge = document.getElementById('cloudSyncBadge');
+            const statusTxt = document.getElementById('syncStatusText');
+            if (badge && statusTxt) {
+                badge.classList.remove('hidden');
+                statusTxt.innerText = status;
+            }
+        }
+
+        // Local Storage Helpers
+        function saveStateLocally() {
+            localStorage.setItem('aura_store_games', JSON.stringify(storeState.games));
+            localStorage.setItem('aura_store_password', storeState.adminPassword);
+            localStorage.setItem('aura_store_orders', JSON.stringify(storeState.orders));
+        }
+
+        function loadFromLocalStorage() {
+            const savedGames = localStorage.getItem('aura_store_games');
+            const savedPass = localStorage.getItem('aura_store_password');
+            const savedOrders = localStorage.getItem('aura_store_orders');
+
+            storeState.games = savedGames ? JSON.parse(savedGames) : defaultGamesList;
+            if (savedPass) storeState.adminPassword = savedPass;
+            if (savedOrders) storeState.orders = JSON.parse(savedOrders);
+            
+            renderGames();
+        }
+
+        // Push Updates to Cloud Database & LocalStorage
+        function syncCloudAndSave() {
+            saveStateLocally();
+            if (dbRef) {
+                dbRef.set({
+                    games: storeState.games,
+                    adminPassword: storeState.adminPassword,
+                    orders: storeState.orders
+                }).then(() => {
+                    showToast(storeState.lang === 'en' ? 'Synchronized to all devices!' : 'تم التحديث لجميع الأجهزة!');
+                }).catch((err) => {
+                    console.log('Cloud sync error:', err);
+                });
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            updateLanguageUI();
+            updatePaymentDetailsDisplay();
+        });
+
+        // Language Translations Object
+        const translations = {
+            en: {
+                headerTagline: 'Official Games & Cards',
+                adminBtn: 'Admin',
+                heroBadge: 'Instant Digital Delivery',
+                heroTitle: 'LEVEL UP YOUR GAMING EXPERIENCE',
+                heroSubtitle: 'Get official game keys, top-ups, and gift cards at the best rates with instant support.',
+                exploreGames: 'Explore Games',
+                catalogTitle: 'Available Products',
+                cartTitle: 'Your Shopping Cart',
+                cartTotal: 'Total Amount:',
+                custNameLbl: 'Your Name / الاسم',
+                custPhoneLbl: 'Phone Number / رقم الهاتف',
+                paymentMethodLbl: 'Payment Method / طريقة الدفع',
+                uploadReceiptLbl: 'Upload Payment Screenshot / صورة التحويل',
+                sendOrderBtn: 'Send Order to WhatsApp',
+                addToCart: 'Add to Cart',
+                copy: 'Copy',
+                searchPlaceholder: 'Search games, gift cards...'
+            },
+            ar: {
+                headerTagline: 'متجر الألعاب والبطاقات المعتمد',
+                adminBtn: 'الأدمن',
+                heroBadge: 'تسليم رقمي فوري',
+                heroTitle: 'ارتقِ بتجربة الألعاب الخاصة بك',
+                heroSubtitle: 'احصل على أكواد الألعاب والبطاقات بأفضل الأسعار مع دعم فني سريع.',
+                exploreGames: 'تصفح الألعاب',
+                catalogTitle: 'المنتجات المتاحة',
+                cartTitle: 'سلة التسوق الخاصة بك',
+                cartTotal: 'الإجمالي:',
+                custNameLbl: 'الاسم الكامل',
+                custPhoneLbl: 'رقم الهاتف',
+                paymentMethodLbl: 'طريقة الدفع',
+                uploadReceiptLbl: 'رفع إيصال / سكرين شوت التحويل',
+                sendOrderBtn: 'إرسال الطلب عبر الواتساب',
+                addToCart: 'إضافة للسلة',
+                copy: 'نسخ',
+                searchPlaceholder: 'ابحث عن لعبة أو بطاقة...'
+            }
+        };
+
+        function toggleLanguage() {
+            storeState.lang = storeState.lang === 'en' ? 'ar' : 'en';
+            document.documentElement.dir = storeState.lang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = storeState.lang;
+            document.getElementById('langBtnText').innerText = storeState.lang === 'en' ? 'العربية' : 'English';
+            updateLanguageUI();
+            renderGames();
+        }
+
+        function updateLanguageUI() {
+            const t = translations[storeState.lang];
+            document.getElementById('headerTagline').innerText = t.headerTagline;
+            document.getElementById('adminBtnText').innerText = t.adminBtn;
+            document.getElementById('heroBadge').innerText = t.heroBadge;
+            document.getElementById('heroTitle').innerText = t.heroTitle;
+            document.getElementById('heroSubtitle').innerText = t.heroSubtitle;
+            document.getElementById('exploreGamesBtn').innerText = t.exploreGames;
+            document.getElementById('catalogTitle').innerHTML = `<i class="fa-solid fa-fire text-aura-red"></i> ${t.catalogTitle}`;
+            document.getElementById('cartTitle').innerText = t.cartTitle;
+            document.getElementById('cartTotalLabel').innerText = t.cartTotal;
+            document.getElementById('lblCustomerName').innerText = t.custNameLbl;
+            document.getElementById('lblCustomerPhone').innerText = t.custPhoneLbl;
+            document.getElementById('lblPaymentMethod').innerText = t.paymentMethodLbl;
+            document.getElementById('lblUploadReceipt').innerText = t.uploadReceiptLbl;
+            document.getElementById('submitOrderBtnText').innerText = t.sendOrderBtn;
+            document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+        }
+
+        function renderGames() {
+            const grid = document.getElementById('gamesGrid');
+            grid.innerHTML = '';
+
+            let filtered = storeState.games.filter(game => {
+                const matchesCat = storeState.currentCategory === 'all' || game.category === storeState.currentCategory;
+                const matchesSearch = game.title.toLowerCase().includes(storeState.searchQuery.toLowerCase());
+                return matchesCat && matchesSearch;
+            });
+
+            document.getElementById('productCount').innerText = `${filtered.length} Products`;
+            const emptyState = document.getElementById('emptySearchState');
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                filtered.forEach(game => {
+                    const card = document.createElement('div');
+                    card.className = "bg-aura-cardBg border border-aura-border rounded-2xl overflow-hidden hover:border-aura-red/60 transition duration-300 flex flex-col justify-between group";
+                    card.innerHTML = `
+                        <div class="relative aspect-video bg-black overflow-hidden">
+                            <img src="${game.image}" alt="${game.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <span class="absolute top-3 right-3 px-2.5 py-1 bg-black/80 backdrop-blur-md border border-aura-border text-[10px] font-bold uppercase tracking-wider text-aura-red rounded-lg">
+                                ${game.category}
+                            </span>
+                        </div>
+                        <div class="p-4 flex flex-col flex-grow justify-between space-y-3">
+                            <div>
+                                <h4 class="font-extrabold text-white text-base group-hover:text-aura-red transition line-clamp-1">${game.title}</h4>
+                            </div>
+                            <div class="flex items-center justify-between pt-2 border-t border-aura-border/60">
+                                <div>
+                                    <span class="text-[10px] text-gray-400 block">${storeState.lang === 'en' ? 'Price' : 'السعر'}</span>
+                                    <span class="text-lg font-black text-white">EGP ${game.price}</span>
+                                </div>
+                                <button onclick="addToCart('${game.id}')" class="px-3.5 py-2 bg-aura-red hover:bg-aura-darkRed text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 neon-glow">
+                                    <i class="fa-solid fa-cart-plus"></i>
+                                    <span>${translations[storeState.lang].addToCart}</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        function filterCategory(cat) {
+            storeState.currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-aura-red', 'text-white');
+                btn.classList.add('bg-aura-cardBg', 'text-gray-300');
+            });
+            event.target.classList.remove('bg-aura-cardBg', 'text-gray-300');
+            event.target.classList.add('bg-aura-red', 'text-white');
+            renderGames();
+        }
+
+        function handleSearch() {
+            storeState.searchQuery = document.getElementById('searchInput').value;
+            renderGames();
+        }
+
+        function addToCart(gameId) {
+            const game = storeState.games.find(g => g.id === gameId);
+            if (!game) return;
+
+            const existing = storeState.cart.find(item => item.id === gameId);
+            if (existing) {
+                existing.qty++;
+            } else {
+                storeState.cart.push({ ...game, qty: 1 });
+            }
+
+            updateCartUI();
+            showToast(storeState.lang === 'en' ? 'Added to Cart!' : 'تمت الإضافة للسلة!');
+        }
+
+        function updateCartUI() {
+            const cartList = document.getElementById('cartItemsList');
+            cartList.innerHTML = '';
+
+            let total = 0;
+            let count = 0;
+
+            storeState.cart.forEach((item, index) => {
+                total += item.price * item.qty;
+                count += item.qty;
+
+                const row = document.createElement('div');
+                row.className = "flex items-center justify-between bg-aura-darkBg p-3 rounded-xl border border-aura-border";
+                row.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <img src="${item.image}" class="w-12 h-12 rounded-lg object-cover">
+                        <div>
+                            <h5 class="text-xs font-bold text-white line-clamp-1">${item.title}</h5>
+                            <span class="text-xs font-bold text-aura-red">EGP ${item.price}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="changeCartQty(${index}, -1)" class="w-6 h-6 rounded bg-aura-cardBg border border-aura-border text-gray-300 text-xs flex items-center justify-center font-bold">-</button>
+                        <span class="text-xs font-bold text-white">${item.qty}</span>
+                        <button onclick="changeCartQty(${index}, 1)" class="w-6 h-6 rounded bg-aura-cardBg border border-aura-border text-gray-300 text-xs flex items-center justify-center font-bold">+</button>
+                    </div>
+                `;
+                cartList.appendChild(row);
+            });
+
+            document.getElementById('cartBadgeCount').innerText = count;
+            document.getElementById('cartTotalPrice').innerText = `EGP ${total}`;
+        }
+
+        function changeCartQty(index, delta) {
+            storeState.cart[index].qty += delta;
+            if (storeState.cart[index].qty <= 0) {
+                storeState.cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function toggleCartDrawer() {
+            const overlay = document.getElementById('cartDrawerOverlay');
+            const content = document.getElementById('cartDrawerContent');
+            if (overlay.classList.contains('opacity-0')) {
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                content.classList.remove('translate-x-full');
+            } else {
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                content.classList.add('translate-x-full');
+            }
+        }
+
+        function updatePaymentDetailsDisplay() {
+            const method = document.getElementById('paymentMethodSelect').value;
+            const targetAcc = document.getElementById('paymentTargetAccount');
+            
+            if (method === 'vodafone') {
+                targetAcc.innerText = '01060455989';
+            } else if (method === 'instapay') {
+                targetAcc.innerText = '01060455989';
+            } else if (method === 'telda') {
+                targetAcc.innerText = 'hamzaahmed63626';
+            }
+        }
+
+        function copyPaymentNumber() {
+            const num = document.getElementById('paymentTargetAccount').innerText;
+            navigator.clipboard.writeText(num);
+            showToast(storeState.lang === 'en' ? 'Account Number Copied!' : 'تم نسخ رقم الحساب!');
+        }
+
+        function previewReceiptImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                storeState.uploadedReceiptBase64 = e.target.result;
+                document.getElementById('receiptPreviewImg').src = e.target.result;
+                document.getElementById('receiptPreviewBox').classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function submitOrderViaWhatsApp() {
+            const custName = document.getElementById('custNameInput').value.trim();
+            const custPhone = document.getElementById('custPhoneInput').value.trim();
+            const paymentMethod = document.getElementById('paymentMethodSelect').value;
+
+            if (storeState.cart.length === 0) {
+                showToast(storeState.lang === 'en' ? 'Your cart is empty!' : 'سلتك فارغة!');
+                return;
+            }
+            if (!custName || !custPhone) {
+                showToast(storeState.lang === 'en' ? 'Please enter name & phone!' : 'يرجى إدخال الاسم ورقم الهاتف!');
+                return;
+            }
+
+            let total = 0;
+            let itemsSummary = '';
+            storeState.cart.forEach((item, i) => {
+                const sub = item.price * item.qty;
+                total += sub;
+                itemsSummary += `${i+1}. ${item.title} (x${item.qty}) - EGP ${sub}\n`;
+            });
+
+            // Save order to store state for admin viewing
+            const newOrder = {
+                id: 'ORD-' + Date.now(),
+                customerName: custName,
+                customerPhone: custPhone,
+                items: storeState.cart,
+                total: total,
+                paymentMethod: paymentMethod,
+                receiptImg: storeState.uploadedReceiptBase64,
+                date: new Date().toLocaleString()
+            };
+
+            storeState.orders.unshift(newOrder);
+            syncCloudAndSave();
+
+            // Construct WhatsApp Message
+            let msg = `🛒 *NEW ORDER - AURA STORE*\n`;
+            msg += `---------------------------\n`;
+            msg += `👤 *Customer:* ${custName}\n`;
+            msg += `📱 *Phone:* ${custPhone}\n`;
+            msg += `💳 *Payment:* ${paymentMethod.toUpperCase()}\n`;
+            msg += `---------------------------\n`;
+            msg += `🎮 *Items Ordered:*\n${itemsSummary}\n`;
+            msg += `💰 *Total Amount:* EGP ${total}\n`;
+            msg += `---------------------------\n`;
+            msg += `📌 Receipt uploaded in store system.`;
+
+            const encodedMsg = encodeURIComponent(msg);
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMsg}`, '_blank');
+
+            // Reset cart
+            storeState.cart = [];
+            updateCartUI();
+            toggleCartDrawer();
+            showToast(storeState.lang === 'en' ? 'Order Sent Successfully!' : 'تم إرسال الطلب بنجاح!');
+        }
+
+        function openAdminModal() {
+            document.getElementById('adminModalOverlay').classList.remove('hidden');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModalOverlay').classList.add('hidden');
+        }
+
+        function authenticateAdmin() {
+            const inputPass = document.getElementById('adminPassInput').value;
+            if (inputPass === storeState.adminPassword) {
+                document.getElementById('adminLoginForm').classList.add('hidden');
+                document.getElementById('adminDashboardContent').classList.remove('hidden');
+                renderAdminGamesTable();
+                renderAdminOrders();
+                showToast('Welcome Admin!');
+            } else {
+                showToast(storeState.lang === 'en' ? 'Incorrect Admin Password!' : 'كلمة السر غير صحيحة!');
+            }
+        }
+
+        function saveNewAdminPassword() {
+            const oldP = document.getElementById('oldPassInput').value;
+            const newP = document.getElementById('newPassInput').value.trim();
+
+            if (oldP !== storeState.adminPassword) {
+                showToast(storeState.lang === 'en' ? 'Current password wrong!' : 'كلمة السر الحالية غير صحيحة!');
+                return;
+            }
+            if (!newP || newP.length < 4) {
+                showToast(storeState.lang === 'en' ? 'Password must be at least 4 characters!' : 'كلمة السر يجب أن تكون 4 خانات على الأقل!');
+                return;
+            }
+
+            storeState.adminPassword = newP;
+            syncCloudAndSave();
+            document.getElementById('oldPassInput').value = '';
+            document.getElementById('newPassInput').value = '';
+            showToast(storeState.lang === 'en' ? 'Admin Password Changed & Saved!' : 'تم تغيير كلمة السر وحفظها بالسحابة!');
+        }
+
+        function switchAdminTab(tabId) {
+            document.querySelectorAll('.admin-tab-panel').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.admin-tab-btn').forEach(b => {
+                b.classList.remove('bg-aura-red', 'text-white');
+                b.classList.add('bg-aura-darkBg', 'text-gray-300');
+            });
+
+            if (tabId === 'addGame') document.getElementById('tabAddGame').classList.remove('hidden');
+            if (tabId === 'manageGames') {
+                document.getElementById('tabManageGames').classList.remove('hidden');
+                renderAdminGamesTable();
+            }
+            if (tabId === 'viewOrders') {
+                document.getElementById('tabViewOrders').classList.remove('hidden');
+                renderAdminOrders();
+            }
+            if (tabId === 'securitySettings') document.getElementById('tabSecuritySettings').classList.remove('hidden');
+
+            event.target.classList.remove('bg-aura-darkBg', 'text-gray-300');
+            event.target.classList.add('bg-aura-red', 'text-white');
+        }
+
+        function handleGameImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                storeState.uploadedNewGameImgBase64 = e.target.result;
+                document.getElementById('gameImgPreview').src = e.target.result;
+                document.getElementById('gameImgPreviewContainer').classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function createNewGameSubmit() {
+            const title = document.getElementById('newGameTitle').value.trim();
+            const cat = document.getElementById('newGameCat').value;
+            const price = parseFloat(document.getElementById('newGamePrice').value);
+            const img = storeState.uploadedNewGameImgBase64 || 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80';
+
+            if (!title || isNaN(price)) {
+                showToast(storeState.lang === 'en' ? 'Fill title & price!' : 'يرجى إدخال العنوان والسعر!');
+                return;
+            }
+
+            const newProduct = {
+                id: 'g-' + Date.now(),
+                title: title,
+                category: cat,
+                price: price,
+                image: img
+            };
+
+            storeState.games.unshift(newProduct);
+            syncCloudAndSave();
+            renderGames();
+
+            // Clear inputs
+            document.getElementById('newGameTitle').value = '';
+            document.getElementById('newGamePrice').value = '';
+            document.getElementById('gameImgPreviewContainer').classList.add('hidden');
+            storeState.uploadedNewGameImgBase64 = '';
+
+            showToast(storeState.lang === 'en' ? 'New Product Published Globally!' : 'تم نشر المنتج لجميع الأجهزة!');
+        }
+
+        function renderAdminGamesTable() {
+            const tbody = document.getElementById('adminGamesTableBody');
+            tbody.innerHTML = '';
+
+            storeState.games.forEach((game) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-aura-darkBg/50";
+                tr.innerHTML = `
+                    <td class="p-3 flex items-center gap-2">
+                        <img src="${game.image}" class="w-8 h-8 rounded object-cover">
+                        <span class="font-bold text-white line-clamp-1">${game.title}</span>
+                    </td>
+                    <td class="p-3 capitalize">${game.category}</td>
+                    <td class="p-3">
+                        <input type="number" value="${game.price}" onchange="updateGamePrice('${game.id}', this.value)" class="w-20 bg-aura-darkBg border border-aura-border rounded p-1 text-xs text-yellow-400 font-bold">
+                    </td>
+                    <td class="p-3 text-right">
+                        <button onclick="deleteGame('${game.id}')" class="px-2 py-1 bg-red-600/80 hover:bg-red-600 text-white rounded text-xs font-bold">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateGamePrice(gameId, newPrice) {
+            const g = storeState.games.find(item => item.id === gameId);
+            if (g) {
+                g.price = parseFloat(newPrice) || g.price;
+                syncCloudAndSave();
+                renderGames();
+            }
+        }
+
+        function deleteGame(gameId) {
+            storeState.games = storeState.games.filter(g => g.id !== gameId);
+            syncCloudAndSave();
+            renderGames();
+            renderAdminGamesTable();
+            showToast(storeState.lang === 'en' ? 'Product Deleted!' : 'تم حذف المنتج!');
+        }
+
+        function renderAdminOrders() {
+            const container = document.getElementById('adminOrdersContainer');
+            container.innerHTML = '';
+
+            if (storeState.orders.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">No incoming orders yet.</p>`;
+                return;
+            }
+
+            storeState.orders.forEach(ord => {
+                const box = document.createElement('div');
+                box.className = "bg-aura-darkBg border border-aura-border p-4 rounded-xl space-y-3";
+                
+                let itemsList = ord.items.map(i => `${i.title} (x${i.qty})`).join(', ');
+
+                box.innerHTML = `
+                    <div class="flex justify-between items-start border-b border-aura-border/60 pb-2">
+                        <div>
+                            <span class="text-xs font-mono text-aura-red font-bold">${ord.id}</span>
+                            <h5 class="text-sm font-bold text-white">${ord.customerName} (${ord.customerPhone})</h5>
+                            <span class="text-[10px] text-gray-400">${ord.date}</span>
+                        </div>
+                        <span class="text-sm font-black text-yellow-400">EGP ${ord.total}</span>
+                    </div>
+                    <p class="text-xs text-gray-300"><strong class="text-white">Items:</strong> ${itemsList}</p>
+                    <p class="text-xs text-gray-300"><strong class="text-white">Payment Method:</strong> ${ord.paymentMethod}</p>
+                    ${ord.receiptImg ? `
+                        <div>
+                            <span class="text-[10px] font-bold text-gray-400 block mb-1">Receipt Screenshot:</span>
+                            <img src="${ord.receiptImg}" class="max-h-40 rounded border border-aura-border object-contain">
+                        </div>
+                    ` : '<span class="text-xs text-gray-500">No receipt image attached</span>'}
+                `;
+                container.appendChild(box);
+            });
+        }
+
+        function clearAllOrders() {
+            storeState.orders = [];
+            syncCloudAndSave();
+            renderAdminOrders();
+            showToast('Orders cleared!');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            const toastMsg = document.getElementById('toastMessage');
+            toastMsg.innerText = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
