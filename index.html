@@ -43,9 +43,6 @@
         .neon-glow {
             box-shadow: 0 0 20px rgba(255, 30, 66, 0.35);
         }
-        .neon-glow-lg {
-            box-shadow: 0 0 35px rgba(255, 30, 66, 0.5);
-        }
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -152,6 +149,7 @@
         </div>
     </main>
 
+    <!-- Shopping Cart Drawer -->
     <div id="cartDrawerOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex justify-end">
         <div id="cartDrawerContent" class="w-full max-w-md bg-aura-cardBg h-full flex flex-col justify-between p-6 overflow-y-auto translate-x-full transition-transform duration-300 border-l border-aura-border">
             
@@ -223,6 +221,7 @@
         </div>
     </div>
 
+    <!-- Admin Portal Modal -->
     <div id="adminModalOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-aura-cardBg border border-aura-border w-full max-w-3xl rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
             
@@ -343,11 +342,11 @@
                     <div class="p-4 bg-aura-darkBg rounded-xl border border-aura-border space-y-3 text-xs">
                         <div class="flex items-center justify-between">
                             <span class="text-gray-400">Cloud Storage Server:</span>
-                            <span class="text-emerald-400 font-mono font-bold">Active (Online)</span>
+                            <span class="text-emerald-400 font-mono font-bold">Firebase Realtime Live</span>
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="text-gray-400">Live Auto Sync:</span>
-                            <span class="text-yellow-400 font-bold">Every 4 Seconds</span>
+                            <span class="text-yellow-400 font-bold">Every 3 Seconds</span>
                         </div>
                         <button onclick="forceSyncFromCloud()" class="w-full py-2 bg-aura-red text-white font-bold rounded-lg mt-2 hover:bg-aura-darkRed">
                             <i class="fa-solid fa-rotate mr-1"></i> Force Sync All Devices Now
@@ -360,7 +359,7 @@
         </div>
     </div>
 
-    <!-- Notification Toast -->
+    <!-- Toast Notification -->
     <div id="toastNotification" class="fixed bottom-6 right-6 z-50 bg-aura-cardBg border border-aura-red text-white text-xs font-bold px-4 py-3 rounded-xl shadow-2xl opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-3">
         <i id="toastIcon" class="fa-solid fa-circle-check text-aura-red text-base"></i>
         <span id="toastMessage">Notification</span>
@@ -378,13 +377,13 @@
     </footer>
 
     <script>
-        // Merchant WhatsApp Number
+        // WhatsApp Target Number
         const WHATSAPP_NUMBER = '201043858175';
 
-        // Shared Public KV Cloud Engine Endpoint
-        const CLOUD_ENDPOINT = 'https://kvdb.io/aura_store_cloud_v2/app_data';
+        // Firebase Live REST Cloud Endpoint (Universal Cross-Device Access)
+        const CLOUD_ENDPOINT = 'https://aura-store-live-default-rtdb.firebaseio.com/store_db.json';
 
-        // Default catalog fallback
+        // Default Fallback Inventory
         const defaultGamesList = [
             { id: 'g1', title: 'EA SPORTS FC 25', category: 'games', price: 1250, image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80' },
             { id: 'g2', title: 'Call of Duty: Black Ops 6', category: 'games', price: 1500, image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80' },
@@ -392,7 +391,7 @@
             { id: 'g4', title: 'PlayStation $25 Gift Card', category: 'cards', price: 1200, image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80' }
         ];
 
-        // Application State
+        // Store State
         let storeState = {
             lang: 'en',
             games: defaultGamesList,
@@ -405,7 +404,6 @@
             uploadedNewGameImgBase64: ''
         };
 
-        // Translations Object
         const translations = {
             en: {
                 headerTagline: 'Official Games & Cards',
@@ -447,19 +445,18 @@
             }
         };
 
-        // Initialize App
         window.addEventListener('DOMContentLoaded', () => {
             loadLocalState();
             renderGames();
             updateLanguageUI();
             updatePaymentDetailsDisplay();
 
-            // Fetch latest Cloud State & setup continuous auto-polling every 4 seconds
+            // Initial cloud fetch & sync loop every 3 seconds
             fetchCloudState();
-            setInterval(fetchCloudState, 4000);
+            setInterval(fetchCloudState, 3000);
         });
 
-        // Cloud API Operations
+        // Cloud Persistence Methods
         async function fetchCloudState() {
             try {
                 const res = await fetch(CLOUD_ENDPOINT, { cache: 'no-store' });
@@ -495,7 +492,7 @@
                     lastUpdated: Date.now()
                 };
                 await fetch(CLOUD_ENDPOINT, {
-                    method: 'POST',
+                    method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
@@ -508,7 +505,7 @@
 
         function forceSyncFromCloud() {
             fetchCloudState();
-            showToast(storeState.lang === 'en' ? 'Synced with cloud!' : 'تم التحديث سحابياً!');
+            showToast(storeState.lang === 'en' ? 'Synced with Cloud Live!' : 'تم التحديث سحابياً!');
         }
 
         function updateCloudBadge(isOnline) {
@@ -523,7 +520,6 @@
             }
         }
 
-        // Local Storage Operations
         function saveLocalState() {
             localStorage.setItem('aura_store_games', JSON.stringify(storeState.games));
             localStorage.setItem('aura_store_pass', storeState.adminPassword);
@@ -540,7 +536,6 @@
             if (o) storeState.orders = JSON.parse(o);
         }
 
-        // Language Controls
         function toggleLanguage() {
             storeState.lang = storeState.lang === 'en' ? 'ar' : 'en';
             document.documentElement.dir = storeState.lang === 'ar' ? 'rtl' : 'ltr';
@@ -569,7 +564,6 @@
             document.getElementById('searchInput').placeholder = t.searchPlaceholder;
         }
 
-        // Render Catalog Grid
         function renderGames() {
             const grid = document.getElementById('gamesGrid');
             grid.innerHTML = '';
@@ -634,7 +628,6 @@
             renderGames();
         }
 
-        // Cart Engine
         function addToCart(gameId) {
             const game = storeState.games.find(g => g.id === gameId);
             if (!game) return;
@@ -790,7 +783,7 @@
             showToast(storeState.lang === 'en' ? 'Order Submitted!' : 'تم إرسال الطلب!');
         }
 
-        // Admin Engine
+        // Admin Management Functions
         function openAdminModal() {
             document.getElementById('adminModalOverlay').classList.remove('hidden');
         }
