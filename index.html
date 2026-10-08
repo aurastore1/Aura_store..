@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura Store | Digital Games & Cards</title>
+    <title>Aura Store | متجر الألعاب </title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -35,7 +35,7 @@
     </script>
     <style>
         body {
-            font-family: 'Poppins', 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Poppins', sans-serif;
             background-color: #0b0c10;
             color: #ffffff;
             overflow-x: hidden;
@@ -57,6 +57,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
+    <!-- Header Navigation -->
     <header class="sticky top-0 z-40 bg-aura-darkBg/95 backdrop-blur-md border-b border-aura-border">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <!-- Brand Logo -->
@@ -66,28 +67,28 @@
                 </div>
                 <div>
                     <h1 class="text-2xl font-black tracking-wider text-white">AURA <span class="text-aura-red">STORE</span></h1>
-                    <p class="text-xs text-gray-400 tracking-widest uppercase font-semibold" id="headerTagline">Official Games & Cards</p>
+                    <p class="text-xs text-gray-400 tracking-widest uppercase font-semibold" id="headerTagline">متجر الألعاب والبطاقات المعتمد</p>
                 </div>
             </div>
 
             <!-- Controls & Actions -->
-            <div class="flex items-center gap-3 sm:gap-5">
-                <!-- Realtime Cloud Sync Status Indicator -->
+            <div class="flex items-center gap-3 sm:gap-4">
+                <!-- Realtime Cloud Sync Status Badge -->
                 <div id="cloudSyncBadge" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 text-xs font-semibold shadow-inner">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                    <span id="syncStatusText">Cloud Live</span>
+                    <span id="syncDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span id="syncStatusText">متصل بالسحابة</span>
                 </div>
 
                 <!-- Language Switcher -->
                 <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-lg border border-aura-border bg-aura-cardBg hover:border-aura-red transition text-xs font-bold flex items-center gap-2 text-gray-200">
                     <i class="fa-solid fa-globe text-aura-red"></i>
-                    <span id="langBtnText">العربية</span>
+                    <span id="langBtnText">English</span>
                 </button>
 
-                <!-- Protected Admin Button -->
+                <!-- Admin Button -->
                 <button onclick="openAdminModal()" class="px-3.5 py-1.5 rounded-lg bg-aura-cardBg border border-aura-border hover:border-aura-red text-aura-red font-bold text-xs sm:text-sm flex items-center gap-2 transition">
                     <i class="fa-solid fa-user-shield"></i>
-                    <span id="adminBtnText">Admin</span>
+                    <span id="adminBtnText">الأدمن</span>
                 </button>
 
                 <!-- Shopping Cart Button -->
@@ -103,29 +104,29 @@
         
         <!-- Hero Banner -->
         <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-aura-cardBg via-black to-aura-darkRed border border-aura-border p-6 sm:p-10 mb-10 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="z-10 max-w-xl text-center md:text-left">
-                <span class="px-3 py-1 bg-aura-red/20 border border-aura-red text-aura-red text-xs font-bold uppercase tracking-widest rounded-full" id="heroBadge">Instant Digital Delivery</span>
-                <h2 class="text-3xl sm:text-5xl font-black mt-3 mb-3 leading-tight text-white" id="heroTitle">LEVEL UP YOUR GAMING EXPERIENCE</h2>
-                <p class="text-gray-300 text-sm sm:text-base leading-relaxed" id="heroSubtitle">Get official game keys, top-ups, and gift cards at the best rates with instant support.</p>
+            <div class="z-10 max-w-xl text-center md:text-right">
+                <span class="px-3 py-1 bg-aura-red/20 border border-aura-red text-aura-red text-xs font-bold uppercase tracking-widest rounded-full" id="heroBadge">تسليم رقمي فوري</span>
+                <h2 class="text-3xl sm:text-5xl font-black mt-3 mb-3 leading-tight text-white" id="heroTitle">ارتقِ بتجربة الألعاب الخاصة بك</h2>
+                <p class="text-gray-300 text-sm sm:text-base leading-relaxed" id="heroSubtitle">احصل على أكواد الألعاب الشحن والبطاقات بأفضل الأسعار مع دعم فني مباشر وسريع.</p>
             </div>
             <div class="z-10 flex flex-col sm:flex-row gap-3 w-full md:w-auto">
                 <a href="#gamesSection" class="px-6 py-3.5 rounded-xl bg-aura-red hover:bg-aura-darkRed text-white font-bold text-center transition neon-glow">
-                    <i class="fa-solid fa-gamepad mr-2"></i> <span id="exploreGamesBtn">Explore Games</span>
+                    <i class="fa-solid fa-gamepad ml-2"></i> <span id="exploreGamesBtn">تصفح المنتجات</span>
                 </a>
             </div>
-            <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-aura-red/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-aura-red/20 rounded-full blur-3xl pointer-events-none"></div>
         </div>
 
         <!-- Search & Filter Controls -->
         <div class="mb-8 flex flex-col sm:flex-row gap-4 items-center justify-between">
             <div class="relative w-full sm:w-96">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search games, gift cards..." class="w-full bg-aura-cardBg border border-aura-border rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-aura-red transition">
+                <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="ابحث عن لعبة أو بطاقة..." class="w-full bg-aura-cardBg border border-aura-border rounded-xl py-3 pr-11 pl-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-aura-red transition">
             </div>
             <div class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0" id="categoryTabs">
-                <button onclick="filterCategory('all', this)" class="cat-btn active px-4 py-2 rounded-xl bg-aura-red text-white text-xs font-bold whitespace-nowrap transition">All Items</button>
-                <button onclick="filterCategory('games', this)" class="cat-btn px-4 py-2 rounded-xl bg-aura-cardBg border border-aura-border text-gray-300 hover:border-aura-red text-xs font-bold whitespace-nowrap transition">Games</button>
-                <button onclick="filterCategory('cards', this)" class="cat-btn px-4 py-2 rounded-xl bg-aura-cardBg border border-aura-border text-gray-300 hover:border-aura-red text-xs font-bold whitespace-nowrap transition">Gift Cards</button>
+                <button onclick="filterCategory('all', this)" class="cat-btn active px-4 py-2 rounded-xl bg-aura-red text-white text-xs font-bold whitespace-nowrap transition">كل المنتجات</button>
+                <button onclick="filterCategory('games', this)" class="cat-btn px-4 py-2 rounded-xl bg-aura-cardBg border border-aura-border text-gray-300 hover:border-aura-red text-xs font-bold whitespace-nowrap transition">ألعاب رقمية</button>
+                <button onclick="filterCategory('cards', this)" class="cat-btn px-4 py-2 rounded-xl bg-aura-cardBg border border-aura-border text-gray-300 hover:border-aura-red text-xs font-bold whitespace-nowrap transition">بطاقات هدايا</button>
             </div>
         </div>
 
@@ -133,9 +134,9 @@
         <div id="gamesSection" class="scroll-mt-24">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-xl sm:text-2xl font-extrabold flex items-center gap-3" id="catalogTitle">
-                    <i class="fa-solid fa-fire text-aura-red"></i> Available Products
+                    <i class="fa-solid fa-fire text-aura-red"></i> المنتجات المتاحة
                 </h3>
-                <span id="productCount" class="text-xs text-gray-400 font-semibold">0 Products Loaded</span>
+                <span id="productCount" class="text-xs text-gray-400 font-semibold">0 منتج</span>
             </div>
 
             <div id="gamesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -144,69 +145,69 @@
             
             <div id="emptySearchState" class="hidden py-16 text-center">
                 <i class="fa-solid fa-ghost text-5xl text-gray-600 mb-4"></i>
-                <h4 class="text-lg font-bold text-gray-400" id="noResultsText">No products found</h4>
+                <h4 class="text-lg font-bold text-gray-400" id="noResultsText">لا توجد منتجات مطابقة للبحث</h4>
             </div>
         </div>
     </main>
 
     <!-- Shopping Cart Drawer -->
     <div id="cartDrawerOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex justify-end">
-        <div id="cartDrawerContent" class="w-full max-w-md bg-aura-cardBg h-full flex flex-col justify-between p-6 overflow-y-auto translate-x-full transition-transform duration-300 border-l border-aura-border">
+        <div id="cartDrawerContent" class="w-full max-w-md bg-aura-cardBg h-full flex flex-col justify-between p-6 overflow-y-auto translate-x-full transition-transform duration-300 border-r border-aura-border">
             
             <div>
                 <div class="flex items-center justify-between border-b border-aura-border pb-4 mb-4">
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-bag-shopping text-aura-red text-2xl"></i>
-                        <h3 class="text-lg font-extrabold text-white" id="cartTitle">Your Shopping Cart</h3>
+                        <h3 class="text-lg font-extrabold text-white" id="cartTitle">سلة التسوق</h3>
                     </div>
                     <button onclick="toggleCartDrawer()" class="text-gray-400 hover:text-white p-2">
                         <i class="fa-solid fa-xmark text-xl"></i>
                     </button>
                 </div>
 
-                <div id="cartItemsList" class="space-y-4 max-h-[35vh] overflow-y-auto pr-1">
+                <div id="cartItemsList" class="space-y-4 max-h-[35vh] overflow-y-auto pl-1">
                     <!-- Cart Items -->
                 </div>
             </div>
 
             <div class="border-t border-aura-border pt-4 mt-4 space-y-4">
                 <div class="flex justify-between items-center py-2 bg-aura-darkBg px-4 rounded-xl border border-aura-border">
-                    <span class="text-sm text-gray-400 font-semibold" id="cartTotalLabel">Total Amount:</span>
+                    <span class="text-sm text-gray-400 font-semibold" id="cartTotalLabel">المبلغ الإجمالي:</span>
                     <span id="cartTotalPrice" class="text-2xl font-black text-aura-red">EGP 0</span>
                 </div>
 
                 <div class="space-y-3">
                     <div>
-                        <label class="block text-xs font-bold text-gray-300 mb-1" id="lblCustomerName">Your Name / الاسم</label>
-                        <input type="text" id="custNameInput" placeholder="John Doe / أحمد محمود" class="w-full bg-aura-darkBg border border-aura-border rounded-lg p-2.5 text-xs text-white focus:border-aura-red focus:outline-none">
+                        <label class="block text-xs font-bold text-gray-300 mb-1" id="lblCustomerName">الاسم الكامل</label>
+                        <input type="text" id="custNameInput" placeholder="أحمد محمود" class="w-full bg-aura-darkBg border border-aura-border rounded-lg p-2.5 text-xs text-white focus:border-aura-red focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-gray-300 mb-1" id="lblCustomerPhone">Phone Number / رقم الهاتف</label>
+                        <label class="block text-xs font-bold text-gray-300 mb-1" id="lblCustomerPhone">رقم الهاتف</label>
                         <input type="tel" id="custPhoneInput" placeholder="010XXXXXXXX" class="w-full bg-aura-darkBg border border-aura-border rounded-lg p-2.5 text-xs text-white focus:border-aura-red focus:outline-none">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-300 mb-1" id="lblPaymentMethod">Payment Method / طريقة الدفع</label>
+                        <label class="block text-xs font-bold text-gray-300 mb-1" id="lblPaymentMethod">طريقة الدفع</label>
                         <select id="paymentMethodSelect" onchange="updatePaymentDetailsDisplay()" class="w-full bg-aura-darkBg border border-aura-border rounded-lg p-2.5 text-xs text-white focus:border-aura-red focus:outline-none">
-                            <option value="vodafone">💵 Vodafone Cash (01060455989)</option>
-                            <option value="instapay">📲 InstaPay (01060455989)</option>
-                            <option value="telda">💰 Telda (hamzaahmed63626)</option>
+                            <option value="vodafone">💵 فودافون كاش (01060455989)</option>
+                            <option value="instapay">📲 انستا باي InstaPay (01060455989)</option>
+                            <option value="telda">💰 تيلدا Telda (hamzaahmed63626)</option>
                         </select>
                     </div>
 
                     <div id="paymentInstructionsBox" class="p-3 bg-aura-darkBg/90 rounded-xl border border-aura-red/40 text-xs space-y-2">
-                        <p class="text-gray-300 font-medium">Transfer payment to the selected account below:</p>
+                        <p class="text-gray-300 font-medium">حول المبلغ للحساب التالي:</p>
                         <div class="flex items-center justify-between bg-black/50 p-2 rounded border border-aura-border">
                             <span id="paymentTargetAccount" class="font-mono text-yellow-400 font-bold">01060455989</span>
                             <button onclick="copyPaymentNumber()" class="px-2.5 py-1 bg-aura-red text-white text-[10px] font-bold rounded hover:bg-aura-darkRed transition">
-                                <i class="fa-solid fa-copy"></i> Copy
+                                <i class="fa-solid fa-copy"></i> نسخ
                             </button>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-300 mb-1" id="lblUploadReceipt">Upload Payment Screenshot / صورة التحويل</label>
-                        <input type="file" id="receiptFileInput" accept="image/*" onchange="previewReceiptImage(event)" class="w-full bg-aura-darkBg text-xs text-gray-400 border border-aura-border rounded-lg p-2 file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-aura-red file:text-white hover:file:bg-aura-darkRed">
+                        <label class="block text-xs font-bold text-gray-300 mb-1" id="lblUploadReceipt">صورة التحويل / السكرين شوت</label>
+                        <input type="file" id="receiptFileInput" accept="image/*" onchange="previewReceiptImage(event)" class="w-full bg-aura-darkBg text-xs text-gray-400 border border-aura-border rounded-lg p-2 file:ml-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-aura-red file:text-white hover:file:bg-aura-darkRed">
                         <div id="receiptPreviewBox" class="hidden mt-2 relative w-full h-24 bg-black rounded border border-aura-border overflow-hidden">
                             <img id="receiptPreviewImg" src="" class="w-full h-full object-contain">
                         </div>
@@ -215,7 +216,7 @@
 
                 <button onclick="submitOrderViaWhatsApp()" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm flex items-center justify-center gap-2 transition shadow-lg shadow-emerald-950">
                     <i class="fa-brands fa-whatsapp text-lg"></i>
-                    <span id="submitOrderBtnText">Send Order to WhatsApp</span>
+                    <span id="submitOrderBtnText">إرسال الطلب عبر الواتساب</span>
                 </button>
             </div>
         </div>
@@ -228,7 +229,7 @@
             <div class="flex items-center justify-between border-b border-aura-border pb-4 mb-6">
                 <div class="flex items-center gap-3">
                     <i class="fa-solid fa-user-shield text-aura-red text-2xl"></i>
-                    <h3 class="text-xl font-black text-white" id="adminModalTitle">Aura Admin Control Portal</h3>
+                    <h3 class="text-xl font-black text-white" id="adminModalTitle">لوحة تحكم الأدمن (Aura Portal)</h3>
                 </div>
                 <button onclick="closeAdminModal()" class="text-gray-400 hover:text-white">
                     <i class="fa-solid fa-xmark text-xl"></i>
@@ -237,67 +238,67 @@
 
             <div id="adminLoginForm" class="py-8 space-y-4 max-w-sm mx-auto text-center">
                 <i class="fa-solid fa-lock text-4xl text-aura-red mb-2"></i>
-                <h4 class="text-lg font-bold text-white">Enter Admin Password</h4>
-                <p class="text-xs text-gray-400">Default Password: <code class="text-yellow-400">admin123</code></p>
-                <input type="password" id="adminPassInput" placeholder="Enter Password..." class="w-full bg-aura-darkBg border border-aura-border rounded-xl p-3 text-center text-sm font-mono text-white focus:border-aura-red focus:outline-none">
+                <h4 class="text-lg font-bold text-white">أدخل كلمة سر الأدمن</h4>
+                <p class="text-xs text-gray-400">كلمة السر الافتراضية: <code class="text-yellow-400 font-mono">admin123</code></p>
+                <input type="password" id="adminPassInput" placeholder="كلمة السر..." class="w-full bg-aura-darkBg border border-aura-border rounded-xl p-3 text-center text-sm font-mono text-white focus:border-aura-red focus:outline-none">
                 <button onclick="authenticateAdmin()" class="w-full py-3 bg-aura-red hover:bg-aura-darkRed text-white font-bold rounded-xl transition">
-                    Unlock Admin Panel
+                    دخول لوحة التحكم
                 </button>
             </div>
 
             <div id="adminDashboardContent" class="hidden space-y-8">
                 
                 <div class="flex flex-wrap gap-2 border-b border-aura-border pb-3">
-                    <button onclick="switchAdminTab('addGame', this)" class="admin-tab-btn active px-4 py-2 bg-aura-red text-white text-xs font-bold rounded-lg">Add New Game</button>
-                    <button onclick="switchAdminTab('manageGames', this)" class="admin-tab-btn px-4 py-2 bg-aura-darkBg border border-aura-border text-gray-300 text-xs font-bold rounded-lg">Manage Games & Prices</button>
-                    <button onclick="switchAdminTab('viewOrders', this)" class="admin-tab-btn px-4 py-2 bg-aura-darkBg border border-aura-border text-gray-300 text-xs font-bold rounded-lg">Incoming Orders</button>
-                    <button onclick="switchAdminTab('securitySettings', this)" class="admin-tab-btn px-4 py-2 bg-aura-darkBg border border-aura-border text-yellow-400 text-xs font-bold rounded-lg">Security & Password</button>
-                    <button onclick="switchAdminTab('cloudSyncTab', this)" class="admin-tab-btn px-4 py-2 bg-aura-darkBg border border-aura-border text-emerald-400 text-xs font-bold rounded-lg">Cloud Status</button>
+                    <button onclick="switchAdminTab('addGame', this)" class="admin-tab-btn active px-4 py-2 bg-aura-red text-white text-xs font-bold rounded-lg">إضافة منتج جديد</button>
+                    <button onclick="switchAdminTab('manageGames', this)" class="admin-tab-btn px-4 py-2 bg-aura-darkBg border border-aura-border text-gray-300 text-xs font-bold rounded-lg">تعديل الأسعار والمنتجات</button>
+                    <button onclick="switchAdminTab('viewOrders', this)" class="admin-tab-btn px-4 py-2 bg-aura-darkBg border border-aura-border text-gray-300 text-xs font-bold rounded-lg">الطلبات الواردة</button>
+                    <button onclick="switchAdminTab('securitySettings', this)" class="admin-tab-btn px-4 py-2 bg-aura-darkBg border border-aura-border text-yellow-400 text-xs font-bold rounded-lg">كلمة السر</button>
+                    <button onclick="switchAdminTab('cloudSyncTab', this)" class="admin-tab-btn px-4 py-2 bg-aura-darkBg border border-aura-border text-emerald-400 text-xs font-bold rounded-lg">حالة المزامنة السحابية</button>
                 </div>
 
                 <!-- Tab 1: Add New Game -->
                 <div id="tabAddGame" class="admin-tab-panel space-y-4">
-                    <h4 class="font-bold text-white text-base">Add New Product (Global Cloud Sync)</h4>
+                    <h4 class="font-bold text-white text-base">إضافة منتج جديد (مزامنة فورية لكل الموبايلات)</h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold text-gray-300 mb-1">Product Name / اسم اللعبة</label>
-                            <input type="text" id="newGameTitle" placeholder="e.g. EA SPORTS FC 25" class="w-full bg-aura-darkBg border border-aura-border rounded-lg p-2.5 text-xs text-white">
+                            <label class="block text-xs font-semibold text-gray-300 mb-1">اسم المنتج / اللعبة</label>
+                            <input type="text" id="newGameTitle" placeholder="مثال: EA SPORTS FC 25" class="w-full bg-aura-darkBg border border-aura-border rounded-lg p-2.5 text-xs text-white">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-300 mb-1">Category / التصنيف</label>
+                            <label class="block text-xs font-semibold text-gray-300 mb-1">التصنيف</label>
                             <select id="newGameCat" class="w-full bg-aura-darkBg border border-aura-border rounded-lg p-2.5 text-xs text-white">
-                                <option value="games">Digital Game</option>
-                                <option value="cards">Gift Card / Top Up</option>
+                                <option value="games">لعبة رقمية (Digital Game)</option>
+                                <option value="cards">بطاقة شحن (Gift Card)</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-300 mb-1">Price (EGP) / السعر</label>
-                            <input type="number" id="newGamePrice" placeholder="e.g. 1200" class="w-full bg-aura-darkBg border border-aura-border rounded-lg p-2.5 text-xs text-white">
+                            <label class="block text-xs font-semibold text-gray-300 mb-1">السعر (بالجنيه EGP)</label>
+                            <input type="number" id="newGamePrice" placeholder="مثال: 1200" class="w-full bg-aura-darkBg border border-aura-border rounded-lg p-2.5 text-xs text-white">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-300 mb-1">Product Image / صورة اللعبة</label>
+                            <label class="block text-xs font-semibold text-gray-300 mb-1">صورة المنتج</label>
                             <input type="file" id="newGameImgFile" accept="image/*" onchange="handleGameImageUpload(event)" class="w-full bg-aura-darkBg text-xs text-gray-400 border border-aura-border rounded-lg p-1.5">
                         </div>
                     </div>
                     <div id="gameImgPreviewContainer" class="hidden w-32 h-32 relative rounded-lg border border-aura-border overflow-hidden bg-black">
                         <img id="gameImgPreview" src="" class="w-full h-full object-cover">
                     </div>
-                    <button onclick="createNewGameSubmit()" class="px-6 py-3 bg-aura-red hover:bg-aura-darkRed text-white text-xs font-extrabold rounded-xl transition">
-                        <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Add Product & Sync Cloud
+                    <button onclick="createNewGameSubmit()" class="px-6 py-3 bg-aura-red hover:bg-aura-darkRed text-white text-xs font-extrabold rounded-xl transition flex items-center gap-2">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر على كل الأجهزة فوراً
                     </button>
                 </div>
 
                 <!-- Tab 2: Manage Games -->
                 <div id="tabManageGames" class="admin-tab-panel hidden space-y-4">
-                    <h4 class="font-bold text-white text-base">Current Store Inventory</h4>
+                    <h4 class="font-bold text-white text-base">إدارة قائمة المنتجات والأسعار</h4>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-gray-300 border border-aura-border rounded-xl overflow-hidden">
+                        <table class="w-full text-right text-xs text-gray-300 border border-aura-border rounded-xl overflow-hidden">
                             <thead class="bg-aura-darkBg text-gray-400 uppercase font-bold">
                                 <tr>
-                                    <th class="p-3">Product</th>
-                                    <th class="p-3">Category</th>
-                                    <th class="p-3">Price (EGP)</th>
-                                    <th class="p-3 text-right">Actions</th>
+                                    <th class="p-3">المنتج</th>
+                                    <th class="p-3">التصنيف</th>
+                                    <th class="p-3">السعر (EGP)</th>
+                                    <th class="p-3 text-left">إجراءات</th>
                                 </tr>
                             </thead>
                             <tbody id="adminGamesTableBody" class="divide-y divide-aura-border">
@@ -310,8 +311,8 @@
                 <!-- Tab 3: Incoming Orders -->
                 <div id="tabViewOrders" class="admin-tab-panel hidden space-y-4">
                     <div class="flex justify-between items-center">
-                        <h4 class="font-bold text-white text-base">Recent Orders & Receipts</h4>
-                        <button onclick="clearAllOrders()" class="text-xs text-red-400 hover:underline">Clear History</button>
+                        <h4 class="font-bold text-white text-base">سجل الطلبات والإيصالات</h4>
+                        <button onclick="clearAllOrders()" class="text-xs text-red-400 hover:underline">مسح السجل</button>
                     </div>
                     <div id="adminOrdersContainer" class="space-y-4">
                         <!-- Dynamic orders -->
@@ -320,36 +321,36 @@
 
                 <!-- Tab 4: Security & Password -->
                 <div id="tabSecuritySettings" class="admin-tab-panel hidden space-y-4 max-w-md">
-                    <h4 class="font-bold text-white text-base">Change Admin Password</h4>
+                    <h4 class="font-bold text-white text-base">تغيير كلمة سر الأدمن</h4>
                     <div class="space-y-3 bg-aura-darkBg p-4 rounded-xl border border-aura-border">
                         <div>
-                            <label class="block text-xs text-gray-300 mb-1">Current Password</label>
+                            <label class="block text-xs text-gray-300 mb-1">كلمة السر الحالية</label>
                             <input type="password" id="oldPassInput" class="w-full bg-aura-cardBg border border-aura-border rounded-lg p-2.5 text-xs text-white">
                         </div>
                         <div>
-                            <label class="block text-xs text-gray-300 mb-1">New Password</label>
+                            <label class="block text-xs text-gray-300 mb-1">كلمة السر الجديدة</label>
                             <input type="password" id="newPassInput" class="w-full bg-aura-cardBg border border-aura-border rounded-lg p-2.5 text-xs text-white">
                         </div>
                         <button onclick="saveNewAdminPassword()" class="w-full py-2.5 bg-aura-red hover:bg-aura-darkRed text-white text-xs font-bold rounded-lg transition">
-                            Save & Sync Password
+                            حفظ كلمة السر الجديدة
                         </button>
                     </div>
                 </div>
 
-                <!-- Tab 5: Cloud Sync Info -->
+                <!-- Tab 5: Cloud Sync Status -->
                 <div id="tabCloudSyncTab" class="admin-tab-panel hidden space-y-4 max-w-md">
-                    <h4 class="font-bold text-white text-base">Cloud Synchronization Status</h4>
+                    <h4 class="font-bold text-white text-base">حالة المزامنة السحابية المباشرة</h4>
                     <div class="p-4 bg-aura-darkBg rounded-xl border border-aura-border space-y-3 text-xs">
                         <div class="flex items-center justify-between">
-                            <span class="text-gray-400">Cloud Storage Server:</span>
-                            <span class="text-emerald-400 font-mono font-bold">Firebase Realtime Live</span>
+                            <span class="text-gray-400">السيرفر السحابي:</span>
+                            <span class="text-emerald-400 font-mono font-bold">Aura Live Store Engine</span>
                         </div>
                         <div class="flex items-center justify-between">
-                            <span class="text-gray-400">Live Auto Sync:</span>
-                            <span class="text-yellow-400 font-bold">Every 3 Seconds</span>
+                            <span class="text-gray-400">المزامنة اللحظية:</span>
+                            <span class="text-yellow-400 font-bold">كل 2 ثانية تلقائياً</span>
                         </div>
-                        <button onclick="forceSyncFromCloud()" class="w-full py-2 bg-aura-red text-white font-bold rounded-lg mt-2 hover:bg-aura-darkRed">
-                            <i class="fa-solid fa-rotate mr-1"></i> Force Sync All Devices Now
+                        <button onclick="forceSyncFromCloud()" class="w-full py-2 bg-aura-red text-white font-bold rounded-lg mt-2 hover:bg-aura-darkRed transition">
+                            <i class="fa-solid fa-rotate ml-1"></i> تحديث البيانات الآن يدوياً
                         </button>
                     </div>
                 </div>
@@ -362,14 +363,14 @@
     <!-- Toast Notification -->
     <div id="toastNotification" class="fixed bottom-6 right-6 z-50 bg-aura-cardBg border border-aura-red text-white text-xs font-bold px-4 py-3 rounded-xl shadow-2xl opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-3">
         <i id="toastIcon" class="fa-solid fa-circle-check text-aura-red text-base"></i>
-        <span id="toastMessage">Notification</span>
+        <span id="toastMessage">إشعار</span>
     </div>
 
     <!-- Footer -->
     <footer class="bg-aura-darkBg border-t border-aura-border py-8 mt-12">
         <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
             <h4 class="text-lg font-black tracking-wider text-white">AURA <span class="text-aura-red">STORE</span></h4>
-            <p class="text-xs text-gray-400">© 2026 Aura Store. Live Synchronized Storefront.</p>
+            <p class="text-xs text-gray-400">© 2026 Aura Store. جميع الحقوق محفوظة.</p>
             <div class="flex justify-center gap-4 text-sm text-gray-400">
                 <span><i class="fa-brands fa-whatsapp text-emerald-400"></i> 01043858175</span>
             </div>
@@ -380,10 +381,11 @@
         // WhatsApp Target Number
         const WHATSAPP_NUMBER = '201043858175';
 
-        // Firebase Live REST Cloud Endpoint (Universal Cross-Device Access)
-        const CLOUD_ENDPOINT = 'https://aura-store-live-default-rtdb.firebaseio.com/store_db.json';
+        // Reliable Global Public REST API Sync Storage Endpoint
+        const PUBLIC_STORE_CHANNEL_URL = 'https://keyvalue.immanuel.co/api/KeyVal/GetValue/AuraStoreGlobalDB_V2';
+        const PUBLIC_STORE_UPDATE_URL = 'https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/AuraStoreGlobalDB_V2/';
 
-        // Default Fallback Inventory
+        // Fallback Initial Inventory
         const defaultGamesList = [
             { id: 'g1', title: 'EA SPORTS FC 25', category: 'games', price: 1250, image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80' },
             { id: 'g2', title: 'Call of Duty: Black Ops 6', category: 'games', price: 1500, image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80' },
@@ -393,7 +395,7 @@
 
         // Store State
         let storeState = {
-            lang: 'en',
+            lang: 'ar',
             games: defaultGamesList,
             cart: [],
             orders: [],
@@ -401,47 +403,48 @@
             currentCategory: 'all',
             searchQuery: '',
             uploadedReceiptBase64: '',
-            uploadedNewGameImgBase64: ''
+            uploadedNewGameImgBase64: '',
+            lastUpdatedTimestamp: 0
         };
 
         const translations = {
-            en: {
-                headerTagline: 'Official Games & Cards',
-                adminBtn: 'Admin',
-                heroBadge: 'Instant Digital Delivery',
-                heroTitle: 'LEVEL UP YOUR GAMING EXPERIENCE',
-                heroSubtitle: 'Get official game keys, top-ups, and gift cards at the best rates with instant support.',
-                exploreGames: 'Explore Games',
-                catalogTitle: 'Available Products',
-                cartTitle: 'Your Shopping Cart',
-                cartTotal: 'Total Amount:',
-                custNameLbl: 'Your Name / الاسم',
-                custPhoneLbl: 'Phone Number / رقم الهاتف',
-                paymentMethodLbl: 'Payment Method / طريقة الدفع',
-                uploadReceiptLbl: 'Upload Payment Screenshot / صورة التحويل',
-                sendOrderBtn: 'Send Order to WhatsApp',
-                addToCart: 'Add to Cart',
-                copy: 'Copy',
-                searchPlaceholder: 'Search games, gift cards...'
-            },
             ar: {
                 headerTagline: 'متجر الألعاب والبطاقات المعتمد',
                 adminBtn: 'الأدمن',
                 heroBadge: 'تسليم رقمي فوري',
                 heroTitle: 'ارتقِ بتجربة الألعاب الخاصة بك',
                 heroSubtitle: 'احصل على أكواد الألعاب والبطاقات بأفضل الأسعار مع دعم فني سريع.',
-                exploreGames: 'تصفح الألعاب',
+                exploreGames: 'تصفح المنتجات',
                 catalogTitle: 'المنتجات المتاحة',
-                cartTitle: 'سلة التسوق الخاصة بك',
-                cartTotal: 'الإجمالي:',
+                cartTitle: 'سلة التسوق',
+                cartTotal: 'المبلغ الإجمالي:',
                 custNameLbl: 'الاسم الكامل',
                 custPhoneLbl: 'رقم الهاتف',
                 paymentMethodLbl: 'طريقة الدفع',
-                uploadReceiptLbl: 'رفع إيصال / سكرين شوت التحويل',
+                uploadReceiptLbl: 'صورة التحويل / السكرين شوت',
                 sendOrderBtn: 'إرسال الطلب عبر الواتساب',
                 addToCart: 'إضافة للسلة',
                 copy: 'نسخ',
                 searchPlaceholder: 'ابحث عن لعبة أو بطاقة...'
+            },
+            en: {
+                headerTagline: 'Official Games & Cards Store',
+                adminBtn: 'Admin',
+                heroBadge: 'Instant Digital Delivery',
+                heroTitle: 'LEVEL UP YOUR GAMING EXPERIENCE',
+                heroSubtitle: 'Get official game keys, top-ups, and gift cards at the best rates with instant support.',
+                exploreGames: 'Explore Catalog',
+                catalogTitle: 'Available Products',
+                cartTitle: 'Shopping Cart',
+                cartTotal: 'Total Amount:',
+                custNameLbl: 'Your Full Name',
+                custPhoneLbl: 'Phone Number',
+                paymentMethodLbl: 'Payment Method',
+                uploadReceiptLbl: 'Upload Payment Screenshot',
+                sendOrderBtn: 'Send Order via WhatsApp',
+                addToCart: 'Add to Cart',
+                copy: 'Copy',
+                searchPlaceholder: 'Search games, gift cards...'
             }
         };
 
@@ -451,72 +454,91 @@
             updateLanguageUI();
             updatePaymentDetailsDisplay();
 
-            // Initial cloud fetch & sync loop every 3 seconds
+            // Initial Cloud Fetch & Polling interval every 2.5 seconds
             fetchCloudState();
-            setInterval(fetchCloudState, 3000);
+            setInterval(fetchCloudState, 2500);
         });
 
-        // Cloud Persistence Methods
+        // Cloud Realtime API Methods
         async function fetchCloudState() {
             try {
-                const res = await fetch(CLOUD_ENDPOINT, { cache: 'no-store' });
+                const res = await fetch(PUBLIC_STORE_CHANNEL_URL, { cache: 'no-store' });
                 if (res.ok) {
-                    const cloudData = await res.json();
-                    if (cloudData && Array.isArray(cloudData.games)) {
-                        storeState.games = cloudData.games;
-                        if (cloudData.adminPassword) storeState.adminPassword = cloudData.adminPassword;
-                        if (Array.isArray(cloudData.orders)) storeState.orders = cloudData.orders;
-                        
-                        saveLocalState();
-                        renderGames();
-                        if (document.getElementById('adminDashboardContent').style.display !== 'none') {
-                            renderAdminGamesTable();
-                            renderAdminOrders();
+                    const rawText = await res.text();
+                    if (rawText && rawText !== 'null' && rawText !== '""') {
+                        let cloudData = JSON.parse(rawText);
+                        // If data wrapped in quotes or double JSON string
+                        if (typeof cloudData === 'string') cloudData = JSON.parse(cloudData);
+
+                        if (cloudData && Array.isArray(cloudData.games)) {
+                            // Only update if cloud data is newer or local is empty
+                            if (!cloudData.lastUpdatedTimestamp || cloudData.lastUpdatedTimestamp >= storeState.lastUpdatedTimestamp) {
+                                storeState.games = cloudData.games;
+                                if (cloudData.adminPassword) storeState.adminPassword = cloudData.adminPassword;
+                                if (Array.isArray(cloudData.orders)) storeState.orders = cloudData.orders;
+                                if (cloudData.lastUpdatedTimestamp) storeState.lastUpdatedTimestamp = cloudData.lastUpdatedTimestamp;
+
+                                saveLocalState();
+                                renderGames();
+                                if (document.getElementById('adminDashboardContent').style.display !== 'none') {
+                                    renderAdminGamesTable();
+                                    renderAdminOrders();
+                                }
+                            }
+                            updateCloudBadge(true);
                         }
-                        updateCloudBadge(true);
+                    } else {
+                        // DB empty on cloud, upload local initial state
+                        syncCloudAndSave();
                     }
                 }
             } catch (e) {
-                console.warn('Cloud sync read warning:', e);
+                console.warn('Sync Warning:', e);
                 updateCloudBadge(false);
             }
         }
 
         async function syncCloudAndSave() {
+            storeState.lastUpdatedTimestamp = Date.now();
             saveLocalState();
+
+            const payload = {
+                games: storeState.games,
+                adminPassword: storeState.adminPassword,
+                orders: storeState.orders,
+                lastUpdatedTimestamp: storeState.lastUpdatedTimestamp
+            };
+
             try {
-                const payload = {
-                    games: storeState.games,
-                    adminPassword: storeState.adminPassword,
-                    orders: storeState.orders,
-                    lastUpdated: Date.now()
-                };
-                await fetch(CLOUD_ENDPOINT, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                const encodedPayload = encodeURIComponent(JSON.stringify(payload));
+                await fetch(PUBLIC_STORE_UPDATE_URL + encodedPayload, {
+                    method: 'POST'
                 });
                 updateCloudBadge(true);
             } catch (e) {
-                console.warn('Cloud write failed:', e);
+                console.warn('Write to cloud failed:', e);
                 updateCloudBadge(false);
             }
         }
 
         function forceSyncFromCloud() {
             fetchCloudState();
-            showToast(storeState.lang === 'en' ? 'Synced with Cloud Live!' : 'تم التحديث سحابياً!');
+            showToast(storeState.lang === 'ar' ? 'تم جلب البيانات الحالية من السحابة!' : 'Fetched live data from cloud!');
         }
 
         function updateCloudBadge(isOnline) {
             const badge = document.getElementById('cloudSyncBadge');
             const txt = document.getElementById('syncStatusText');
+            const dot = document.getElementById('syncDot');
+
             if (isOnline) {
                 badge.className = "flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 text-xs font-semibold shadow-inner";
-                txt.innerText = "Cloud Live";
+                dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping";
+                txt.innerText = storeState.lang === 'ar' ? "متصل بالسحابة" : "Cloud Connected";
             } else {
                 badge.className = "flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-400 text-xs font-semibold shadow-inner";
-                txt.innerText = "Local Fallback";
+                dot.className = "w-2.5 h-2.5 rounded-full bg-amber-400";
+                txt.innerText = storeState.lang === 'ar' ? "حفظ محلي (أوفلاين)" : "Local Mode";
             }
         }
 
@@ -524,23 +546,26 @@
             localStorage.setItem('aura_store_games', JSON.stringify(storeState.games));
             localStorage.setItem('aura_store_pass', storeState.adminPassword);
             localStorage.setItem('aura_store_orders', JSON.stringify(storeState.orders));
+            localStorage.setItem('aura_store_ts', storeState.lastUpdatedTimestamp);
         }
 
         function loadLocalState() {
             const g = localStorage.getItem('aura_store_games');
             const p = localStorage.getItem('aura_store_pass');
             const o = localStorage.getItem('aura_store_orders');
+            const ts = localStorage.getItem('aura_store_ts');
 
             if (g) storeState.games = JSON.parse(g);
             if (p) storeState.adminPassword = p;
             if (o) storeState.orders = JSON.parse(o);
+            if (ts) storeState.lastUpdatedTimestamp = parseInt(ts) || 0;
         }
 
         function toggleLanguage() {
-            storeState.lang = storeState.lang === 'en' ? 'ar' : 'en';
+            storeState.lang = storeState.lang === 'ar' ? 'en' : 'ar';
             document.documentElement.dir = storeState.lang === 'ar' ? 'rtl' : 'ltr';
             document.documentElement.lang = storeState.lang;
-            document.getElementById('langBtnText').innerText = storeState.lang === 'en' ? 'العربية' : 'English';
+            document.getElementById('langBtnText').innerText = storeState.lang === 'ar' ? 'English' : 'العربية';
             updateLanguageUI();
             renderGames();
         }
@@ -574,7 +599,7 @@
                 return matchesCat && matchesSearch;
             });
 
-            document.getElementById('productCount').innerText = `${filtered.length} Products`;
+            document.getElementById('productCount').innerText = `${filtered.length} ${storeState.lang === 'ar' ? 'منتج' : 'Items'}`;
             const emptyState = document.getElementById('emptySearchState');
 
             if (filtered.length === 0) {
@@ -583,11 +608,11 @@
                 emptyState.classList.add('hidden');
                 filtered.forEach(game => {
                     const card = document.createElement('div');
-                    card.className = "bg-aura-cardBg border border-aura-border rounded-2xl overflow-hidden hover:border-aura-red/60 transition duration-300 flex flex-col justify-between group";
+                    card.className = "bg-aura-cardBg border border-aura-border rounded-2xl overflow-hidden hover:border-aura-red/60 transition duration-300 flex flex-col justify-between group shadow-lg";
                     card.innerHTML = `
                         <div class="relative aspect-video bg-black overflow-hidden">
-                            <img src="${game.image}" alt="${game.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            <span class="absolute top-3 right-3 px-2.5 py-1 bg-black/80 backdrop-blur-md border border-aura-border text-[10px] font-bold uppercase tracking-wider text-aura-red rounded-lg">
+                            <img src="${game.image}" alt="${game.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
+                            <span class="absolute top-3 left-3 px-2.5 py-1 bg-black/80 backdrop-blur-md border border-aura-border text-[10px] font-bold uppercase tracking-wider text-aura-red rounded-lg">
                                 ${game.category}
                             </span>
                         </div>
@@ -597,7 +622,7 @@
                             </div>
                             <div class="flex items-center justify-between pt-2 border-t border-aura-border/60">
                                 <div>
-                                    <span class="text-[10px] text-gray-400 block">${storeState.lang === 'en' ? 'Price' : 'السعر'}</span>
+                                    <span class="text-[10px] text-gray-400 block">${storeState.lang === 'ar' ? 'السعر' : 'Price'}</span>
                                     <span class="text-lg font-black text-white">EGP ${game.price}</span>
                                 </div>
                                 <button onclick="addToCart('${game.id}')" class="px-3.5 py-2 bg-aura-red hover:bg-aura-darkRed text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 neon-glow">
@@ -640,7 +665,7 @@
             }
 
             updateCartUI();
-            showToast(storeState.lang === 'en' ? 'Added to Cart!' : 'تمت الإضافة للسلة!');
+            showToast(storeState.lang === 'ar' ? 'تمت الإضافة للسلة!' : 'Added to Cart!');
         }
 
         function updateCartUI() {
@@ -711,20 +736,46 @@
         function copyPaymentNumber() {
             const num = document.getElementById('paymentTargetAccount').innerText;
             navigator.clipboard.writeText(num);
-            showToast(storeState.lang === 'en' ? 'Account Number Copied!' : 'تم نسخ الرقم!');
+            showToast(storeState.lang === 'ar' ? 'تم نسخ الرقم!' : 'Account Number Copied!');
+        }
+
+        // Image Compression Utility
+        function compressAndResizeImage(file, maxWidth, quality, callback) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > maxWidth) {
+                        height = Math.round((height * maxWidth) / width);
+                        width = maxWidth;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+                    callback(compressedBase64);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
 
         function previewReceiptImage(event) {
             const file = event.target.files[0];
             if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                storeState.uploadedReceiptBase64 = e.target.result;
-                document.getElementById('receiptPreviewImg').src = e.target.result;
+            compressAndResizeImage(file, 500, 0.6, (compressedImg) => {
+                storeState.uploadedReceiptBase64 = compressedImg;
+                document.getElementById('receiptPreviewImg').src = compressedImg;
                 document.getElementById('receiptPreviewBox').classList.remove('hidden');
-            };
-            reader.readAsDataURL(file);
+            });
         }
 
         function submitOrderViaWhatsApp() {
@@ -733,11 +784,11 @@
             const paymentMethod = document.getElementById('paymentMethodSelect').value;
 
             if (storeState.cart.length === 0) {
-                showToast(storeState.lang === 'en' ? 'Your cart is empty!' : 'سلتك فارغة!');
+                showToast(storeState.lang === 'ar' ? 'سلتك فارغة!' : 'Your cart is empty!');
                 return;
             }
             if (!custName || !custPhone) {
-                showToast(storeState.lang === 'en' ? 'Enter name & phone number!' : 'أدخل الاسم ورقم الهاتف!');
+                showToast(storeState.lang === 'ar' ? 'أدخل الاسم ورقم الهاتف!' : 'Enter name & phone number!');
                 return;
             }
 
@@ -750,37 +801,39 @@
             });
 
             const newOrder = {
-                id: 'ORD-' + Date.now(),
+                id: 'ORD-' + Date.now().toString().slice(-6),
                 customerName: custName,
                 customerPhone: custPhone,
                 items: storeState.cart,
                 total: total,
                 paymentMethod: paymentMethod,
                 receiptImg: storeState.uploadedReceiptBase64,
-                date: new Date().toLocaleString()
+                date: new Date().toLocaleString('ar-EG')
             };
 
             storeState.orders.unshift(newOrder);
             syncCloudAndSave();
 
-            let msg = `🛒 *NEW ORDER - AURA STORE*\n`;
+            let msg = `🛒 *طلب جديد - AURA STORE*\n`;
             msg += `---------------------------\n`;
-            msg += `👤 *Customer:* ${custName}\n`;
-            msg += `📱 *Phone:* ${custPhone}\n`;
-            msg += `💳 *Payment:* ${paymentMethod.toUpperCase()}\n`;
+            msg += `👤 *العميل:* ${custName}\n`;
+            msg += `📱 *الهاتف:* ${custPhone}\n`;
+            msg += `💳 *طريقة الدفع:* ${paymentMethod.toUpperCase()}\n`;
             msg += `---------------------------\n`;
-            msg += `🎮 *Items Ordered:*\n${itemsSummary}\n`;
-            msg += `💰 *Total Amount:* EGP ${total}\n`;
+            msg += `🎮 *المنتجات:*\n${itemsSummary}\n`;
+            msg += `💰 *الإجمالي:* EGP ${total}\n`;
             msg += `---------------------------\n`;
-            msg += `📌 Receipt saved in Aura Admin Portal.`;
+            msg += `📌 إيصال التحويل محفوظ في لوحة أدمن Aura Store.`;
 
             const encodedMsg = encodeURIComponent(msg);
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMsg}`, '_blank');
 
             storeState.cart = [];
+            storeState.uploadedReceiptBase64 = '';
+            document.getElementById('receiptPreviewBox').classList.add('hidden');
             updateCartUI();
             toggleCartDrawer();
-            showToast(storeState.lang === 'en' ? 'Order Submitted!' : 'تم إرسال الطلب!');
+            showToast(storeState.lang === 'ar' ? 'تم إرسال الطلب وحفظه بالسحابة!' : 'Order Submitted!');
         }
 
         // Admin Management Functions
@@ -799,9 +852,9 @@
                 document.getElementById('adminDashboardContent').classList.remove('hidden');
                 renderAdminGamesTable();
                 renderAdminOrders();
-                showToast('Welcome Admin!');
+                showToast(storeState.lang === 'ar' ? 'أهلاً بك في لوحة التحكم!' : 'Welcome Admin!');
             } else {
-                showToast(storeState.lang === 'en' ? 'Wrong Password!' : 'كلمة السر غير صحيحة!');
+                showToast(storeState.lang === 'ar' ? 'كلمة السر غير صحيحة!' : 'Wrong Password!');
             }
         }
 
@@ -832,13 +885,11 @@
             const file = event.target.files[0];
             if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                storeState.uploadedNewGameImgBase64 = e.target.result;
-                document.getElementById('gameImgPreview').src = e.target.result;
+            compressAndResizeImage(file, 600, 0.7, (compressedImg) => {
+                storeState.uploadedNewGameImgBase64 = compressedImg;
+                document.getElementById('gameImgPreview').src = compressedImg;
                 document.getElementById('gameImgPreviewContainer').classList.remove('hidden');
-            };
-            reader.readAsDataURL(file);
+            });
         }
 
         function createNewGameSubmit() {
@@ -848,7 +899,7 @@
             const img = storeState.uploadedNewGameImgBase64 || 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80';
 
             if (!title || isNaN(price)) {
-                showToast(storeState.lang === 'en' ? 'Fill title & price!' : 'أدخل الاسم والسعر!');
+                showToast(storeState.lang === 'ar' ? 'أدخل اسم المنتج والسعر!' : 'Fill title & price!');
                 return;
             }
 
@@ -869,7 +920,7 @@
             document.getElementById('gameImgPreviewContainer').classList.add('hidden');
             storeState.uploadedNewGameImgBase64 = '';
 
-            showToast(storeState.lang === 'en' ? 'Product Synced Globally!' : 'تم إضافة المنتج لجميع الأجهزة!');
+            showToast(storeState.lang === 'ar' ? 'تم إضافة المنتج ونشره لكل الأجهزة!' : 'Product Synced Globally!');
         }
 
         function renderAdminGamesTable() {
@@ -884,13 +935,13 @@
                         <img src="${game.image}" class="w-8 h-8 rounded object-cover">
                         <span class="font-bold text-white line-clamp-1">${game.title}</span>
                     </td>
-                    <td class="p-3 capitalize">${game.category}</td>
+                    <td class="p-3 uppercase text-[10px] text-aura-red font-bold">${game.category}</td>
                     <td class="p-3">
                         <input type="number" value="${game.price}" onchange="updateGamePrice('${game.id}', this.value)" class="w-20 bg-aura-darkBg border border-aura-border rounded p-1 text-xs text-yellow-400 font-bold">
                     </td>
-                    <td class="p-3 text-right">
+                    <td class="p-3 text-left">
                         <button onclick="deleteGame('${game.id}')" class="px-2.5 py-1 bg-red-600/80 hover:bg-red-600 text-white rounded text-xs font-bold transition">
-                            <i class="fa-solid fa-trash"></i> Delete
+                            <i class="fa-solid fa-trash"></i> حذف
                         </button>
                     </td>
                 `;
@@ -904,7 +955,7 @@
                 g.price = parseFloat(newPrice) || g.price;
                 syncCloudAndSave();
                 renderGames();
-                showToast('Price Updated & Synced!');
+                showToast(storeState.lang === 'ar' ? 'تم تعديل السعر ومزامنته!' : 'Price Updated & Synced!');
             }
         }
 
@@ -913,7 +964,7 @@
             syncCloudAndSave();
             renderGames();
             renderAdminGamesTable();
-            showToast(storeState.lang === 'en' ? 'Product Deleted!' : 'تم حذف المنتج!');
+            showToast(storeState.lang === 'ar' ? 'تم حذف المنتج من كل الأجهزة!' : 'Product Deleted!');
         }
 
         function renderAdminOrders() {
@@ -921,7 +972,7 @@
             container.innerHTML = '';
 
             if (storeState.orders.length === 0) {
-                container.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">No orders registered yet.</p>`;
+                container.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">لا توجد طلبات مسجلة حتى الآن.</p>`;
                 return;
             }
 
@@ -939,14 +990,14 @@
                         </div>
                         <span class="text-sm font-black text-yellow-400">EGP ${ord.total}</span>
                     </div>
-                    <p class="text-xs text-gray-300"><strong class="text-white">Items:</strong> ${itemsList}</p>
-                    <p class="text-xs text-gray-300"><strong class="text-white">Payment:</strong> ${ord.paymentMethod}</p>
+                    <p class="text-xs text-gray-300"><strong class="text-white">المنتجات:</strong> ${itemsList}</p>
+                    <p class="text-xs text-gray-300"><strong class="text-white">طريقة الدفع:</strong> ${ord.paymentMethod}</p>
                     ${ord.receiptImg ? `
                         <div>
-                            <span class="text-[10px] font-bold text-gray-400 block mb-1">Receipt Screenshot:</span>
+                            <span class="text-[10px] font-bold text-gray-400 block mb-1">صورة إيصال التحويل:</span>
                             <img src="${ord.receiptImg}" class="max-h-40 rounded border border-aura-border object-contain">
                         </div>
-                    ` : '<span class="text-xs text-gray-500">No receipt photo</span>'}
+                    ` : '<span class="text-xs text-gray-500">لا يوجد إيصال مرفق</span>'}
                 `;
                 container.appendChild(box);
             });
@@ -956,7 +1007,7 @@
             storeState.orders = [];
             syncCloudAndSave();
             renderAdminOrders();
-            showToast('Orders cleared!');
+            showToast('تم مسح سجل الطلبات!');
         }
 
         function saveNewAdminPassword() {
@@ -964,11 +1015,11 @@
             const newP = document.getElementById('newPassInput').value.trim();
 
             if (oldP !== storeState.adminPassword) {
-                showToast(storeState.lang === 'en' ? 'Current password wrong!' : 'كلمة السر الحالية غير صحيحة!');
+                showToast(storeState.lang === 'ar' ? 'كلمة السر الحالية غير صحيحة!' : 'Current password wrong!');
                 return;
             }
             if (!newP || newP.length < 4) {
-                showToast(storeState.lang === 'en' ? 'Password min 4 chars!' : 'كلمة السر قصيرة!');
+                showToast(storeState.lang === 'ar' ? 'كلمة السر يجب أن تكون 4 أحرف على الأقل!' : 'Password min 4 chars!');
                 return;
             }
 
@@ -976,7 +1027,7 @@
             syncCloudAndSave();
             document.getElementById('oldPassInput').value = '';
             document.getElementById('newPassInput').value = '';
-            showToast(storeState.lang === 'en' ? 'Password Changed & Synced!' : 'تم تغيير كلمة السر وتحديثها!');
+            showToast(storeState.lang === 'ar' ? 'تم تغيير كلمة السر ومزامنتها سحابياً!' : 'Password Changed & Synced!');
         }
 
         function showToast(msg) {
